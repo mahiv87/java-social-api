@@ -4,6 +4,7 @@ import com.example.social_network_api.model.Thought;
 import com.example.social_network_api.model.User;
 import com.example.social_network_api.repository.ThoughtRepository;
 import com.example.social_network_api.repository.UserRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +59,7 @@ public class UserController {
         userRepository.findById(userId)
                 .map(user -> {
                     if (user.getThoughts() != null && !user.getThoughts().isEmpty()) {
-                        thoughtRepository.deleteAllById(user.getThoughts().stream().map(Thought::getId).toList());
+                        thoughtRepository.deleteAllById(user.getThoughts().stream().map(ObjectId::toString).toList());
                     }
                     userRepository.delete(user);
                     return ResponseEntity.ok().build();

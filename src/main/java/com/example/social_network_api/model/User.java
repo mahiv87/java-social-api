@@ -3,6 +3,7 @@ package com.example.social_network_api.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.*;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class User {
     private String email;
 
     @DBRef
-    private List<Thought> thoughts;
+    private List<ObjectId> thoughts;
 
     @DBRef
     private List<User> friends;
