@@ -42,4 +42,16 @@ public class ThoughtController {
         return thoughtRepository.save(thought);
     }
 
+    @PutMapping("/{thoughtId}")
+    public ResponseEntity<Thought> updateThought(@PathVariable String thoughtId, @RequestBody Thought thoughtDetails) {
+        return thoughtRepository.findById(thoughtId)
+                .map(thought -> {
+                    thought.setThoughtText(thoughtDetails.getThoughtText());
+                    thought.setUsername(thoughtDetails.getUsername());
+                    Thought updatedThought = thoughtRepository.save(thought);
+                    return ResponseEntity.ok().body(updatedThought);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No thought with that Id found..."));
+    }
+
 }
