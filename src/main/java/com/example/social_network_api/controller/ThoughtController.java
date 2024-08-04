@@ -54,4 +54,10 @@ public class ThoughtController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No thought with that Id found..."));
     }
 
+    @DeleteMapping("/{thoughtId}")
+    public void deleteThought(@PathVariable String thoughtId) {
+        thoughtRepository.deleteById(thoughtId);
+    }
+
+
 }
