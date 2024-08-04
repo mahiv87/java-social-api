@@ -1,5 +1,6 @@
 package com.example.social_network_api.controller;
 
+import com.example.social_network_api.model.Reaction;
 import com.example.social_network_api.model.Thought;
 import com.example.social_network_api.repository.ReactionRepository;
 import com.example.social_network_api.repository.ThoughtRepository;
@@ -48,6 +49,7 @@ public class ThoughtController {
                 .map(thought -> {
                     thought.setThoughtText(thoughtDetails.getThoughtText());
                     thought.setUsername(thoughtDetails.getUsername());
+
                     Thought updatedThought = thoughtRepository.save(thought);
                     return ResponseEntity.ok().body(updatedThought);
                 })
@@ -57,6 +59,18 @@ public class ThoughtController {
     @DeleteMapping("/{thoughtId}")
     public void deleteThought(@PathVariable String thoughtId) {
         thoughtRepository.deleteById(thoughtId);
+    }
+
+    @PutMapping("/{thoughtId}/reactions")
+    public ResponseEntity<Thought> addReaction(@PathVariable String thoughtId, @RequestBody Reaction reactionDetails) {
+        return thoughtRepository.findById(thoughtId)
+                .map(thought -> {
+                    thought.getReactions().add(reactionDetails);
+
+                    Thought updatedThought = thoughtRepository.save(thought);
+                    return ResponseEntity.ok().body(updatedThought);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No thought with that Id found..."));
     }
 
 

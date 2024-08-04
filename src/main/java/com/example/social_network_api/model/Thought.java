@@ -27,7 +27,6 @@ public class Thought {
     @Field(name = "username")
     private String username;
 
-    @DBRef
     private List<Reaction> reactions;
 
     public int getReactionCount() {
