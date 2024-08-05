@@ -26,8 +26,7 @@ public class User {
     @DBRef
     private List<ObjectId> thoughts;
 
-    @DBRef
-    private List<User> friends;
+    private List<ObjectId> friends;
 
     public int getFriendCount() {
         return friends != null ? friends.size() : 0;

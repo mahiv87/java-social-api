@@ -67,5 +67,21 @@ public class UserController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with that ID found..."));
     }
 
+    @PutMapping("/{userId}/friends/{friendId}")
+    public ResponseEntity<User> addFriend(@PathVariable String userId, @PathVariable String friendId) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    List<ObjectId> friends = user.getFriends();
+
+                    if (!friends.contains(new ObjectId(friendId))) {
+                        friends.add(new ObjectId(friendId));
+                        user.setFriends(friends);
+                    }
+                    User updatedUser = userRepository.save(user);
+                    return ResponseEntity.ok().body(updatedUser);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with that ID found..."));
+    }
+
 
 }
