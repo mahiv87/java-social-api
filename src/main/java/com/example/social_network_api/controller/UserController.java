@@ -1,6 +1,5 @@
 package com.example.social_network_api.controller;
 
-import com.example.social_network_api.model.Thought;
 import com.example.social_network_api.model.User;
 import com.example.social_network_api.repository.ThoughtRepository;
 import com.example.social_network_api.repository.UserRepository;
@@ -79,6 +78,25 @@ public class UserController {
                     }
                     User updatedUser = userRepository.save(user);
                     return ResponseEntity.ok().body(updatedUser);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with that ID found..."));
+    }
+
+    @DeleteMapping("/{userId}/friends/{friendId}")
+    public ResponseEntity<?> deleteFriend(@PathVariable String userId, @PathVariable String friendId) {
+        return userRepository.findById(userId)
+                .map(user -> {
+                    List<ObjectId> friends = user.getFriends();
+
+                    if (friends.contains(new ObjectId(friendId))) {
+                        friends.remove(new ObjectId(friendId));
+                        user.setFriends(friends);
+
+                        User updatedUser = userRepository.save(user);
+                        return ResponseEntity.ok().body(updatedUser);
+                    } else {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+                    }
                 })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No user with that ID found..."));
     }
