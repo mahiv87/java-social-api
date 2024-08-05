@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
 public class Reaction {
 
     @MongoId(FieldType.OBJECT_ID)
-    private ObjectId reactionId = new ObjectId();
+    private String reactionId;
 
     @Field("reactionBody")
     private String reactionBody;

@@ -73,5 +73,20 @@ public class ThoughtController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No thought with that Id found..."));
     }
 
+    @DeleteMapping("/{thoughtId}/reactions")
+    public ResponseEntity<Thought> deleteReaction(@PathVariable String thoughtId, @RequestBody String reactionId) {
+        return thoughtRepository.findById(thoughtId)
+                .map(thought -> {
+                    List<Reaction> updatedReactions = thought.getReactions().stream()
+                            .filter(reaction -> reaction.getReactionId().equals(reactionId))
+                            .toList();
+
+                    thought.setReactions(updatedReactions);
+
+                    Thought updatedThought = thoughtRepository.save(thought);
+                    return ResponseEntity.ok().body(updatedThought);
+                })
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No thought with that Id found..."));
+    }
 
 }
